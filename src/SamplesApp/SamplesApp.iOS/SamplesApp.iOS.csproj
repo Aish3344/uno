@@ -18,15 +18,7 @@
 
 		<!-- Override the platform for CI builds, so the iPhoneSimulator does not flow through dependencies -->
 		<Platform Condition=" '$(CI_Build)' == 'true' ">AnyCPU</Platform>
-
-		<!-- Force the resolved platform to be iPhoneSimulator, as AnyCPU defaults to iPhone
-			https://github.com/xamarin/xamarin-macios/blob/ec2cc43770df881ad6f29e5d291c45a613557795/msbuild/Xamarin.iOS.Tasks.Core/Xamarin.iOS.Common.targets#L114
-		-->
-		<ComputedPlatform Condition=" '$(CI_Build)' == 'true' ">iPhoneSimulator</ComputedPlatform>
   </PropertyGroup>
-	<ItemGroup>
-		<UnoSourceGeneratorAdditionalProperty Include="PlatformOverride" />
-	</ItemGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -47,19 +39,6 @@
 		<Optimize>true</Optimize>
 		<OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <DefineConstants>XAMARIN;HAS_UNO</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-		<MtouchLink>None</MtouchLink>
-		<MtouchArch>x86_64</MtouchArch>
-		<ConsolePause>false</ConsolePause>
-		<MtouchExtraArgs>--xml=./LinkerExclusions.xml --linkskip=$(AssemblyName) --setenv=MONO_GC_PARAMS=soft-heap-limit=512m,nursery-size=64m,evacuation-threshold=66,major=marksweep,concurrent-sweep</MtouchExtraArgs>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<!-- CI Specific configuration -->
-		<DebugType>none</DebugType>
-		<Optimize>true</Optimize>
-    <DefineConstants>XAMARIN;HAS_UNO</DefineConstants>
-		<OutputPath>bin\iPhoneSimulator\Release</OutputPath>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 		<MtouchLink>None</MtouchLink>

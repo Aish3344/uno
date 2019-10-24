@@ -1,13 +1,15 @@
 ﻿#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
-echo "Lising iOS simulators"
+echo "Listing iOS simulators"
 xcrun simctl list devices --json
 
 /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator &
 
 cd $BUILD_SOURCESDIRECTORY
 
-msbuild /r /p:Configuration=Release /p:CI_Build=true $BUILD_SOURCESDIRECTORY/src/SamplesApp/SamplesApp.iOS/SamplesApp.iOS.csproj
+msbuild /r /p:Configuration=Release $BUILD_SOURCESDIRECTORY/src/SamplesApp/SamplesApp.iOS/SamplesApp.iOS.csproj
 msbuild /r /p:Configuration=Release $BUILD_SOURCESDIRECTORY/src/SamplesApp/SamplesApp.UITests/SamplesApp.UITests.csproj
 
 cd $BUILD_SOURCESDIRECTORY/build
@@ -20,4 +22,10 @@ export UNO_UITEST_SCREENSHOT_PATH=$BUILD_ARTIFACTSTAGINGDIRECTORY/screenshots/io
 
 mkdir -p $UNO_UITEST_SCREENSHOT_PATH
 
-mono $BUILD_SOURCESDIRECTORY/build/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess --agents=1 --workers=1 $BUILD_SOURCESDIRECTORY/src/SamplesApp/SamplesApp.UITests/bin/Release/net47/SamplesApp.UITests.dll > $BUILD_ARTIFACTSTAGINGDIRECTORY/screenshots/ios/nunit-log.txt 2>&1 
+mono $BUILD_SOURCESDIRECTORY/build/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe \
+	--inprocess \
+	--agents=1 \
+	--workers=1 \
+	$BUILD_SOURCESDIRECTORY/src/SamplesApp/SamplesApp.UITests/bin/Release/net47/SamplesApp.UITests.dll \
+	> $BUILD_ARTIFACTSTAGINGDIRECTORY/screenshots/ios/nunit-log.txt 2>&1 \
+	|| true
