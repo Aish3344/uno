@@ -17,7 +17,12 @@
     <UnoSkipUserControlsInVisualTree>false</UnoSkipUserControlsInVisualTree>
 
 		<!-- Override the platform for CI builds, so the iPhoneSimulator does not flow through dependencies -->
-		<Platform Condition=" '$(PlatformOverride)' == 'true' ">AnyCPU</Platform>
+		<Platform Condition=" '$(CI_Build)' == 'true' ">AnyCPU</Platform>
+
+		<!-- Force the resolved platform to be iPhoneSimulator, as AnyCPU defaults to iPhone
+			https://github.com/xamarin/xamarin-macios/blob/ec2cc43770df881ad6f29e5d291c45a613557795/msbuild/Xamarin.iOS.Tasks.Core/Xamarin.iOS.Common.targets#L114
+		-->
+		<ComputedPlatform Condition=" '$(CI_Build)' == 'true' ">iPhoneSimulator</ComputedPlatform>
   </PropertyGroup>
 	<ItemGroup>
 		<UnoSourceGeneratorAdditionalProperty Include="PlatformOverride" />
