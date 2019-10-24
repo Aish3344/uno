@@ -15,8 +15,14 @@
     <ResourcesDirectory>..\SamplesApp.Shared\Strings</ResourcesDirectory>
     <!-- https://github.com/unoplatform/uno/issues/61 -->
     <UnoSkipUserControlsInVisualTree>false</UnoSkipUserControlsInVisualTree>
+
+		<!-- Override the platform for CI builds, so the iPhoneSimulator does not flow through dependencies -->
+		<Platform Condition=" '$(PlatformOverride)' == 'true' ">AnyCPU</Platform>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+	<ItemGroup>
+		<UnoSourceGeneratorAdditionalProperty Include="PlatformOverride" />
+	</ItemGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -35,6 +41,7 @@
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
 		<OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <DefineConstants>XAMARIN;HAS_UNO</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 		<MtouchLink>None</MtouchLink>
@@ -43,8 +50,10 @@
 		<MtouchExtraArgs>--xml=./LinkerExclusions.xml --linkskip=$(AssemblyName) --setenv=MONO_GC_PARAMS=soft-heap-limit=512m,nursery-size=64m,evacuation-threshold=66,major=marksweep,concurrent-sweep</MtouchExtraArgs>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<!-- CI Specific configuration -->
 		<DebugType>none</DebugType>
 		<Optimize>true</Optimize>
+    <DefineConstants>XAMARIN;HAS_UNO</DefineConstants>
 		<OutputPath>bin\iPhoneSimulator\Release</OutputPath>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
