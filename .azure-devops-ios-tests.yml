@@ -13,6 +13,17 @@ jobs:
   - checkout: self
     clean: true
 
+  - task: CacheBeta@0
+    inputs:
+      key: |
+        nuget
+        $(Agent.OS)
+        $(build.sourcesdirectory)/**/*.csproj
+        $(build.sourcesdirectory)/**/Directory.Build.targets
+        $(build.sourcesdirectory)/**/Directory.Build.props
+      path: $(NUGET_PACKAGES)
+    displayName: Cache NuGet packages
+
   - bash: /bin/bash -c "sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh 5_18_1"
     displayName: Select Xamarin Version
 
